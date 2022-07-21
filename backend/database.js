@@ -1,7 +1,9 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
+import { MONGODB_URI } from "./config.js";
 
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true
-}) 
-    .then(db => console.log(`DB is connected`))
-    .catch(err => console.error(err));
+try {
+  const db = await mongoose.connect(MONGODB_URI);
+  console.log("Database is connected to", db.connection.host);
+} catch (error) {
+  console.error(error);
+}
