@@ -4,9 +4,7 @@ export class BookService {
   }
 
   async getBooks() {
-    const response = await fetch(this.URI);
-    const books = await response.json();
-    return books;
+    return (await fetch(this.URI)).json()
   }
 
   async postBook(book) {

@@ -1,58 +1,19 @@
 import { Router } from "express";
-import Book from "../models/Book.js";
-import fs from "fs-extra";
-import path from "path";
+import {
+  createBook,
+  deleteBook,
+  getAllBooks,
+  updateBook,
+} from "../controllers/books.controller.js";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-  try {
-    const books = await Book.find().sort("-_id");
-    res.json(books);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
+router.get("/", getAllBooks);
 
-router.post("/", async (req, res) => {
-  try {
-    const { title, author, isbn } = req.body;
+router.post("/", createBook);
 
-    if (!title || !author || !isbn)
-      return res.status(400).json({ message: "Please, provide all fields" });
+router.delete("/:id", deleteBook);
 
-    const newBook = new Book({ title, author, isbn });
-
-    if (req.file) {
-      newBook.imagePath = "/uploads/" + req.file.filename;
-    }
-
-    const savedBook = await newBook.save();
-    res.json(savedBook);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
-
-router.delete("/:id", async (req, res) => {
-  try {
-    const book = await Book.findByIdAndDelete(req.params.id);
-    await fs.unlink(path.resolve("./backend/public/" + book.imagePath));
-    res.json({ message: "Book Deleted" });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
-
-router.put("/:id", async (req, res) => {
-  try {
-    const book = await Book.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    res.json(book);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-});
+router.patch("/:id", updateBook);
 
 export default router;

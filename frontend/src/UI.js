@@ -10,6 +10,7 @@ export class UI {
     const books = await bookService.getBooks();
     const booksCardContainer = document.getElementById("books-cards");
     booksCardContainer.innerHTML = "";
+
     books.forEach((book) => {
       const div = document.createElement("div");
       div.className = "animated fadeInRight";

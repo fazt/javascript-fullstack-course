@@ -32,7 +32,6 @@ app.use(express.static(join(__dirname, "public")));
 app.use("/uploads", express.static(join(__dirname, "public/uploads")));
 
 // frontend
-
 app.use(express.static(join(__dirname, "../frontend/dist")));
 
 export default app;
